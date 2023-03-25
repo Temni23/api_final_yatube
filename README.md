@@ -1,19 +1,67 @@
-Как запустить проект:
+## Описание:
+Проект api_final_yatube этоучебный проект выполненный студентом :child: Яндекс практикумма. 
+
+В проекте реализовано API для ресурса yatube, который позволяет пользователям создавать посты (в том числе содержащие изображения), комментарии к этм постам и подписки между пользователями.
+Аутентификация пользователей происходит по JWT токену.
+
+
+## Установка на windows:
+
 Клонировать репозиторий и перейти в него в командной строке:
 
-git clone https://github.com/yandex-praktikum/kittygram.git
-cd kittygram
+```
+git clone git@github.com:Temni23/api_final_yatube.git
+```
+
+```
+cd api_final_yatube
+```
+
 Cоздать и активировать виртуальное окружение:
 
-python3 -m venv env
-source env/bin/activate
+```
+python -m venv venv
+```
+
+```
+source venv/Scripts/activate
+```
+
 Установить зависимости из файла requirements.txt:
 
-python3 -m pip install --upgrade pip
+```
+python -m pip install --upgrade pip
+```
+
+```
 pip install -r requirements.txt
+```
+
 Выполнить миграции:
 
-python3 manage.py migrate
+```
+python manage.py migrate
+```
+
 Запустить проект:
 
-python3 manage.py runserver
+```
+python manage.py runserver
+```
+
+## Работа с проектом
+
+После запуска проекта будут доступны следующие эндпоинты
+```
+http://127.0.0.1:8000/api/v1/posts/
+```
+```
+http://127.0.0.1:8000/api/v1/groups/
+```
+```
+http://127.0.0.1:8000/api/v1/follow/
+```
+
+В папке /yatube_api/static/ находится файл redoc.yaml с докментацией по данному проекту.  [Прочитать файл можно по этой ссылке](https://redocly.github.io/redoc/)
+
+Спасибо, тем что дочитал до конца :wink:	:wink:	:wink:	
