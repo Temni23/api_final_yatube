@@ -1,23 +1,49 @@
+import base64
+
+from django.core.files.base import ContentFile
 from rest_framework import serializers
-from rest_framework.relations import SlugRelatedField
+
+from posts.models import Post, Group, Comment, User
 
 
-from posts.models import Comment, Post
+class Base64ImageField(serializers.ImageField):
+    def to_internal_value(self, data):
+        if isinstance(data, str) and data.startswith('data:image'):
+            format, imgstr = data.split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+        return super().to_internal_value(data)
 
 
-class PostSerializer(serializers.ModelSerializer):
-    author = SlugRelatedField(slug_field='username', read_only=True)
-
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = '__all__'
-        model = Post
+        fields = "__all__"
+        model = Group
 
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
-        read_only=True, slug_field='username'
+        slug_field="username",
+        queryset=User.objects.all(),
+        default=serializers.CurrentUserDefault()
     )
 
     class Meta:
-        fields = '__all__'
+        fields = "__all__"
         model = Comment
+
+        read_only_fields = ("post", "author", "created")
+
+
+class PostSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(
+        slug_field="username",
+        queryset=User.objects.all(),
+        default=serializers.CurrentUserDefault()
+    )
+    image = Base64ImageField(required=False, allow_null=True)
+    class Meta:
+        fields = "__all__"
+        model = Post
+
+        read_only_fields = ("pub_date", "author")
