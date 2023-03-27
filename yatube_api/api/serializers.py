@@ -2,6 +2,7 @@ import base64
 
 from django.core.files.base import ContentFile
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from posts.models import Post, Group, Comment, User, Follow
 
@@ -37,6 +38,13 @@ class FollowSerializer(serializers.ModelSerializer):
         model = Follow
 
         read_only_fields = ("user",)
+
+    def validate(self, data):
+        request_user = self.context["request"].user
+        following_user = data["following"]
+        if request_user == following_user:
+            raise ValidationError("Нельзя подписаться на самого себя")
+        return data
 
 
 class CommentSerializer(serializers.ModelSerializer):
